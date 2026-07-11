@@ -1,4 +1,4 @@
-import { Component, type ReactNode } from "react";
+import { Component, type ErrorInfo, type ReactNode } from "react";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -15,10 +15,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     return { hasError: true };
   }
 
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // surface crashes during development; hook a monitoring service here later
+    console.error("ErrorBoundary caught:", error, errorInfo);
+  }
+
   render() {
     if (this.state.hasError) {
       return (
-        <main className="flex min-h-dvh flex-col items-center justify-center gap-4 p-6 text-center">
+        <main
+          role="alert"
+          className="flex min-h-dvh flex-col items-center justify-center gap-4 p-6 text-center"
+        >
           <h1 className="text-xl font-semibold">Algo deu errado.</h1>
           <p className="text-sm text-muted">Recarregue a página para continuar.</p>
           <button
