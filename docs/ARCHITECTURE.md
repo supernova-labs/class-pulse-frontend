@@ -20,7 +20,7 @@ so the client cannot drift from the API
 ## Stack
 
 React 19 · TypeScript · Tailwind v4 (CSS-first tokens) · Vite · Bun (PM/runner) ·
-TanStack Query v5 · React Router v7 · Biome · Jest + Testing Library · Playwright.
+TanStack Query v5 · React Router v8 · Biome · Jest + Testing Library · Playwright.
 
 ## Module map
 
