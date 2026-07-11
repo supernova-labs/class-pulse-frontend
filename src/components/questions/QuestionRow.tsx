@@ -1,5 +1,6 @@
 import type { Ref } from "react";
 import type { Question } from "../../api/types";
+import { FormattedText } from "../ui/FormattedText";
 import { VoteButton } from "./VoteButton";
 
 interface QuestionRowProps {
@@ -35,7 +36,7 @@ export function QuestionRow({
         onClick={() => onToggleVote?.(question)}
       />
       <div className="min-w-0 flex-1">
-        <p className="font-medium leading-snug">{question.body}</p>
+        <FormattedText className="font-medium leading-snug">{question.body}</FormattedText>
         <p className="mt-1 text-sm text-muted">{question.author_name}</p>
       </div>
       {answered && (

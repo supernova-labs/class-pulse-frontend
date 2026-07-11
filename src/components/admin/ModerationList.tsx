@@ -1,4 +1,5 @@
 import type { Question } from "../../api/types";
+import { FormattedText } from "../ui/FormattedText";
 import { AnsweredIcon, TrashIcon } from "../ui/icons";
 
 interface ModerationListProps {
@@ -24,7 +25,7 @@ export function ModerationList({ questions, onToggleAnswered, onDelete }: Modera
               {question.votes}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="leading-snug">{question.body}</p>
+              <FormattedText className="leading-snug">{question.body}</FormattedText>
               <p className="mt-0.5 text-xs text-muted">{question.author_name}</p>
             </div>
             <button

@@ -1,4 +1,6 @@
 import type { Question } from "../../api/types";
+import { formatText } from "../../lib/formatText";
+import { FormattedText } from "../ui/FormattedText";
 import { UpvoteIcon } from "../ui/icons";
 
 interface NebulaStageProps {
@@ -21,14 +23,20 @@ export function NebulaStage({ hero, rest, total, overflow }: NebulaStageProps) {
         <p className="font-mono text-xs font-semibold tracking-[0.22em] text-accent-soft">
           MAIS VOTADA
         </p>
-        <p className="text-4xl font-semibold text-balance text-white [text-shadow:0_0_60px_rgb(124_108_255/0.4)] xl:text-5xl xl:leading-tight">
-          {hero.body}
-        </p>
+        {/* bespoke headline styling (glow / balance), so we build the formatted markup inline here */}
+        <p
+          className="text-4xl font-semibold text-balance text-white [text-shadow:0_0_60px_rgb(124_108_255/0.4)] xl:text-5xl xl:leading-tight"
+          dangerouslySetInnerHTML={{ __html: formatText(hero.body) }}
+        />
         <div className="flex items-center gap-3">
           <span className="inline-flex items-center gap-2 rounded-full border border-accent/50 bg-accent/15 px-4 py-1.5 text-lg font-semibold text-accent-soft shadow-[0_0_24px_rgb(124_108_255/0.25)]">
             <UpvoteIcon /> {hero.votes}
           </span>
-          <span className="text-muted">{hero.author_name}</span>
+          {/* show the asker as a highlighted @mention */}
+          <span
+            className="text-muted"
+            dangerouslySetInnerHTML={{ __html: formatText(`@${hero.author_name}`) }}
+          />
         </div>
       </div>
 
@@ -47,7 +55,9 @@ export function NebulaStage({ hero, rest, total, overflow }: NebulaStageProps) {
                   {question.votes}
                 </span>
                 <div className="min-w-0">
-                  <p className="leading-snug text-pretty text-foreground/85">{question.body}</p>
+                  <FormattedText className="leading-snug text-pretty text-foreground/85">
+                    {question.body}
+                  </FormattedText>
                   <p className="text-xs text-muted-strong">{question.author_name}</p>
                 </div>
               </div>
