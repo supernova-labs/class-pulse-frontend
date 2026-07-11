@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #06060a;
+  --color-surface: #26262e;
+  --color-foreground: #f2f1f6;
+  --color-accent: #7c6cff;
+  --color-accent-soft: #b4a9ff;
+  --color-muted: #8b8a96;
+  --color-muted-strong: #626170;
+  --color-danger: #d89a9a;
+  --color-danger-strong: #b98080;
+  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", monospace;
+  --animate-twinkle: twinkle 3.4s ease-in-out infinite;
+  --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+  --animate-halo: halo 4.5s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgb(124 108 255 / 0.5);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 6px rgb(124 108 255 / 0);
+  }
+}
+
+@keyframes halo {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+html,
+body,
+#root {
+  min-height: 100dvh;
+  background-color: var(--color-background);
+}
+
+body {
+  @apply text-foreground font-sans antialiased;
+}
+
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
+}
