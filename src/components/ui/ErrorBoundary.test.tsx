@@ -7,8 +7,15 @@ function Bomb(): never {
 }
 
 describe("ErrorBoundary", () => {
+  let consoleError: jest.SpyInstance;
+
+  beforeEach(() => {
+    consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => consoleError.mockRestore());
+
   it("renders the fallback with a reload button when a child throws", () => {
-    const consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
     render(
       <ErrorBoundary>
         <Bomb />
@@ -17,7 +24,6 @@ describe("ErrorBoundary", () => {
     expect(screen.getByRole("alert")).toHaveTextContent("Algo deu errado.");
     expect(screen.getByRole("button", { name: "Recarregar" })).toBeInTheDocument();
     expect(consoleError).toHaveBeenCalled();
-    consoleError.mockRestore();
   });
 
   it("renders children when nothing throws", () => {
