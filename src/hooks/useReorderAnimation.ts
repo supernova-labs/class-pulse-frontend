@@ -50,8 +50,15 @@ export function useReorderAnimation(orderKey: string) {
     let callback = cache.get(id);
     if (!callback) {
       callback = (el: HTMLElement | null) => {
-        if (el) elements.current.set(id, el);
-        else elements.current.delete(id);
+        if (el) {
+          elements.current.set(id, el);
+        } else {
+          // row unmounted: drop every trace of it so the maps don't grow unbounded
+          elements.current.delete(id);
+          prevRects.current.delete(id);
+          running.current.delete(id);
+          cache.delete(id);
+        }
       };
       cache.set(id, callback);
     }
