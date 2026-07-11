@@ -24,7 +24,7 @@ export default defineConfig({
       // Reset schema (wipes previous e2e leftovers), migrate, serve the API.
       command: `uv run alembic downgrade base && uv run alembic upgrade head && uv run uvicorn app.main:app --port ${E2E_API_PORT}`,
       cwd: "../backend",
-      url: `${E2E_API_URL}/healthz`,
+      url: `${E2E_API_URL}/health`,
       env: { DATABASE_URL: TEST_DATABASE_URL, ADMIN_PASSWORD: "admin" },
       reuseExistingServer: false,
       timeout: 60_000,
