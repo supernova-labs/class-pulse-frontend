@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  PROJECT_ID: class-pulse-502114
+  REGION: southamerica-east1
+  SERVICE: class-pulse-web
+  IMAGE: southamerica-east1-docker.pkg.dev/class-pulse-502114/class-pulse/web
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Require API_URL variable
+        run: |
+          if [ -z "${{ vars.API_URL }}" ]; then
+            echo "::error::Set the repository variable API_URL to the backend Cloud Run URL before deploying."
+            exit 1
+          fi
+
+      - uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - uses: google-github-actions/setup-gcloud@v3
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and push image
+        run: |
+          docker build --build-arg "VITE_API_URL=${{ vars.API_URL }}" \
+            -t "$IMAGE:$GITHUB_SHA" -t "$IMAGE:latest" .
+          docker push --all-tags "$IMAGE"
+
+      - uses: google-github-actions/deploy-cloudrun@v3
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.IMAGE }}:${{ github.sha }}
+          flags: --allow-unauthenticated --min-instances=0 --max-instances=2 --port=8080
+
+      - name: Smoke test
+        run: |
+          url=$(gcloud run services describe "$SERVICE" --region "$REGION" --format 'value(status.url)')
+          echo "Service URL: $url"
+          curl -sf "$url/join" | grep -q "Class Pulse"

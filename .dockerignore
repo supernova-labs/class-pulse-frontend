@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.git/
+.githooks/
+.github/
+e2e/
+test-results/
+playwright-report/
+.env
+.env.example
+README.md
+CLAUDE.md
