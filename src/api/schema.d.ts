@@ -127,15 +127,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/healthz": {
+    "/health": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Healthz */
-        get: operations["healthz"];
+        /** Health Check */
+        get: operations["health_check"];
         put?: never;
         post?: never;
         delete?: never;
@@ -859,7 +859,7 @@ export interface operations {
             };
         };
     };
-    healthz: {
+    health_check: {
         parameters: {
             query?: never;
             header?: never;
