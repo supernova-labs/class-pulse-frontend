@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Spinner } from "../ui/Spinner";
 
 const MAX_LENGTH = 240;
 
@@ -41,9 +42,11 @@ export function AskForm({ onSubmit }: AskFormProps) {
         <button
           type="submit"
           disabled={!trimmed || sending}
-          className="shrink-0 rounded-xl bg-accent px-5 py-3 font-medium text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+          aria-busy={sending}
+          className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3 font-medium text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Enviar
+          {sending && <Spinner />}
+          {sending ? "Enviando…" : "Enviar"}
         </button>
       </div>
       <div className="flex justify-between text-xs text-muted-strong">

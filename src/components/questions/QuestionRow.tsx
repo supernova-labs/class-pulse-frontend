@@ -1,18 +1,32 @@
+import type { Ref } from "react";
 import type { Question } from "../../api/types";
 import { VoteButton } from "./VoteButton";
 
 interface QuestionRowProps {
   question: Question;
+  index?: number;
   onToggleVote?: (question: Question) => void;
   readOnly?: boolean;
+  ref?: Ref<HTMLLIElement>;
 }
 
-export function QuestionRow({ question, onToggleVote, readOnly }: QuestionRowProps) {
+export function QuestionRow({
+  question,
+  index = 0,
+  onToggleVote,
+  readOnly,
+  ref,
+}: QuestionRowProps) {
   const answered = question.status === "answered";
   return (
     <li
+      ref={ref}
       data-testid="question-row"
-      className={`flex items-start gap-3 border-b border-surface py-4 ${answered ? "opacity-40" : ""}`}
+      // entrance animation on mount (new live questions rise in); answered rows just dim
+      style={answered ? undefined : { animationDelay: `${Math.min(index, 8) * 45}ms` }}
+      className={`flex items-start gap-3 border-b border-surface py-4 ${
+        answered ? "opacity-40" : "animate-rise"
+      }`}
     >
       <VoteButton
         votes={question.votes}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ApiError } from "../../api/client";
+import { Spinner } from "../ui/Spinner";
 
 interface AdminLoginProps {
   onLogin: (password: string) => Promise<void>;
@@ -29,10 +30,10 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
   };
 
   return (
-    <main className="flex min-h-dvh items-center justify-center p-6">
+    <main className="flex min-h-dvh items-center justify-center bg-glow p-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-90 rounded-3xl border border-surface bg-gradient-to-b from-surface/40 to-transparent p-8"
+        className="w-full max-w-90 rounded-3xl border border-surface bg-glow-card p-8"
       >
         <h1 className="text-center text-2xl font-semibold">
           Class Pulse <span className="font-normal text-muted">Gestão</span>
@@ -54,9 +55,11 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
         <button
           type="submit"
           disabled={!password || busy}
-          className="mt-5 w-full rounded-xl bg-accent py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
+          aria-busy={busy}
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 font-medium text-white shadow-[0_0_32px_rgb(124_108_255/0.25)] transition-opacity disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
         >
-          Entrar
+          {busy && <Spinner />}
+          {busy ? "Entrando…" : "Entrar"}
         </button>
       </form>
     </main>

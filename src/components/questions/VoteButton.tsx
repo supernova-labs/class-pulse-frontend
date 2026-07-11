@@ -1,3 +1,5 @@
+import { UpvoteIcon } from "../ui/icons";
+
 interface VoteButtonProps {
   votes: number;
   voted: boolean;
@@ -19,9 +21,7 @@ export function VoteButton({ votes, voted, disabled, onClick }: VoteButtonProps)
           : "border-surface text-muted hover:border-muted-strong"
       } ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
     >
-      <span aria-hidden className="text-[10px] leading-none">
-        ▲
-      </span>
+      <UpvoteIcon />
       <span className="leading-none">{votes}</span>
     </button>
   );

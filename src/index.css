@@ -15,6 +15,7 @@
   --animate-twinkle: twinkle 3.4s ease-in-out infinite;
   --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
   --animate-halo: halo 4.5s ease-in-out infinite;
+  --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes twinkle {
@@ -49,6 +50,27 @@
   }
 }
 
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* honour reduced-motion for every decorative animation (the FLIP reorder gates itself in JS) */
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-twinkle,
+  .animate-halo,
+  .animate-pulse-dot {
+    animation: none;
+  }
+}
+
 html,
 body,
 #root {
@@ -63,4 +85,15 @@ body {
 button:not(:disabled),
 [role="button"]:not(:disabled) {
   cursor: pointer;
+}
+
+/* soft purple glow at the top of a screen (applied to every view except the telão) */
+@utility bg-glow {
+  background-image: radial-gradient(720px 420px at 50% -10%, rgb(124 108 255 / 0.1), transparent 62%);
+}
+
+/* stronger glow for the standalone auth cards (login / join), over the base background */
+@utility bg-glow-card {
+  background-image: radial-gradient(440px 260px at 50% 0%, rgb(124 108 255 / 0.13), transparent 65%);
+  background-color: var(--color-background);
 }

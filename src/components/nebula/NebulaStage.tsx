@@ -1,72 +1,65 @@
-import { useEffect, useState } from "react";
 import type { Question } from "../../api/types";
-import type { StarPlacement } from "../../lib/nebula";
+import { UpvoteIcon } from "../ui/icons";
 
 interface NebulaStageProps {
-  stars: StarPlacement[];
-  questionsById: Map<string, Question>;
+  hero: Question | undefined;
+  rest: Question[];
+  total: number;
+  overflow: number;
 }
 
-export function NebulaStage({ stars, questionsById }: NebulaStageProps) {
+// Telão layout: one glowing hero (most voted) + a dense, readable ranked mural.
+export function NebulaStage({ hero, rest, total, overflow }: NebulaStageProps) {
+  if (!hero) return null;
   return (
-    <div className="relative h-full w-full">
-      {stars.map((star) => {
-        const question = questionsById.get(star.id);
-        if (!question) return null;
-        return <Star key={star.id} star={star} question={question} />;
-      })}
-    </div>
-  );
-}
+    <div className="grid h-full grid-cols-1 gap-10 lg:grid-cols-[42%_1fr] lg:gap-14">
+      <div className="relative isolate flex flex-col justify-center gap-5">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 left-1/2 -z-10 size-[540px] max-w-[130%] -translate-x-1/2 -translate-y-1/2 animate-halo rounded-full bg-[radial-gradient(closest-side,rgb(124_108_255/0.16),transparent_70%)]"
+        />
+        <p className="font-mono text-xs font-semibold tracking-[0.22em] text-accent-soft">
+          MAIS VOTADA
+        </p>
+        <p className="text-4xl font-semibold text-balance text-white [text-shadow:0_0_60px_rgb(124_108_255/0.4)] xl:text-5xl xl:leading-tight">
+          {hero.body}
+        </p>
+        <div className="flex items-center gap-3">
+          <span className="inline-flex items-center gap-2 rounded-full border border-accent/50 bg-accent/15 px-4 py-1.5 text-lg font-semibold text-accent-soft shadow-[0_0_24px_rgb(124_108_255/0.25)]">
+            <UpvoteIcon /> {hero.votes}
+          </span>
+          <span className="text-muted">{hero.author_name}</span>
+        </div>
+      </div>
 
-function Star({ star, question }: { star: StarPlacement; question: Question }) {
-  // Mount with opacity 0, then flip so the browser animates the fade-in.
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
-
-  const glow = 12 + 28 * star.brightness;
-  const glowAlpha = 0.2 + 0.3 * star.brightness;
-
-  return (
-    <div
-      data-testid="nebula-star"
-      className={`absolute flex flex-col items-center text-center motion-safe:transition-all motion-safe:duration-700 ${
-        star.isCenter ? "max-w-[38ch]" : "max-w-[22ch]"
-      }`}
-      style={{
-        left: `${star.x}%`,
-        top: `${star.y}%`,
-        transform: `translate(-50%, -50%) scale(${star.scale})`,
-        opacity: mounted ? star.brightness : 0,
-        transitionProperty: "left, top, transform, opacity",
-      }}
-    >
-      {star.isCenter && (
-        <>
-          <span
-            aria-hidden
-            className="absolute -z-10 size-56 rounded-full bg-accent/20 blur-3xl animate-halo"
-          />
-          <p className="mb-2 font-mono text-[10px] tracking-[0.22em] text-accent-soft">
-            MAIS VOTADA
-          </p>
-        </>
-      )}
-      <p
-        className={`font-semibold leading-snug ${star.isCenter ? "text-3xl" : "text-lg"}`}
-        style={{ textShadow: `0 0 ${glow}px rgb(124 108 255 / ${glowAlpha})` }}
-      >
-        {question.body}
-      </p>
-      <p className="mt-2 flex items-center gap-2 text-sm text-muted">
-        <span className="rounded-md border border-accent/40 bg-accent/15 px-1.5 py-0.5 font-mono text-xs text-accent-soft">
-          ▲ {question.votes}
-        </span>
-        {question.author_name}
-      </p>
+      <div className="flex min-h-0 flex-col gap-4">
+        <p className="font-mono text-xs font-semibold tracking-[0.2em] text-muted-strong">
+          TODAS AS PERGUNTAS · {total}
+        </p>
+        <div className="relative min-h-0 flex-1">
+          <div className="grid h-full grid-cols-1 content-start gap-x-12 overflow-hidden [-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)] [mask-image:linear-gradient(to_bottom,black_80%,transparent)] md:grid-cols-2">
+            {rest.map((question) => (
+              <div
+                key={question.id}
+                className="flex items-start gap-3.5 border-b border-white/[0.06] py-3"
+              >
+                <span className="w-7 shrink-0 text-right font-mono tabular-nums text-accent-soft">
+                  {question.votes}
+                </span>
+                <div className="min-w-0">
+                  <p className="leading-snug text-pretty text-foreground/85">{question.body}</p>
+                  <p className="text-xs text-muted-strong">{question.author_name}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {overflow > 0 && (
+            <p className="absolute inset-x-0 bottom-0 text-center font-mono text-sm text-muted-strong">
+              + {overflow} perguntas
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { ApiError } from "../api/client";
+import { Spinner } from "../components/ui/Spinner";
 import { useParticipant } from "../hooks/useParticipant";
 import { getStoredParticipant } from "../lib/storage";
 
@@ -41,10 +42,10 @@ export default function JoinPage() {
   };
 
   return (
-    <main className="flex min-h-dvh items-center justify-center p-6">
+    <main className="flex min-h-dvh items-center justify-center bg-glow p-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-90 rounded-3xl border border-surface bg-gradient-to-b from-surface/40 to-transparent p-8 shadow-[0_0_60px_rgb(124_108_255/0.08)]"
+        className="w-full max-w-90 rounded-3xl border border-surface bg-glow-card p-8 shadow-[0_0_60px_rgb(124_108_255/0.08)]"
       >
         <h1 className="text-center text-3xl font-semibold">Class Pulse</h1>
         <p className="mt-2 text-center text-sm text-muted">Entre com o código do workshop</p>
@@ -74,8 +75,10 @@ export default function JoinPage() {
         <button
           type="submit"
           disabled={!code.trim() || joining}
-          className="mt-5 w-full rounded-xl bg-accent py-3 font-medium text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+          aria-busy={joining}
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 font-medium text-white shadow-[0_0_32px_rgb(124_108_255/0.25)] transition-opacity disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
         >
+          {joining && <Spinner />}
           {joining ? "Entrando…" : "Entrar"}
         </button>
         <p className="mt-4 text-center text-xs text-muted-strong">
