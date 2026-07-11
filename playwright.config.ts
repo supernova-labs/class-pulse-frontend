@@ -15,6 +15,8 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${E2E_UI_PORT}`,
     trace: "retain-on-failure",
+    // e2e:slow sets SLOWMO (ms between actions) to make headed runs watchable
+    launchOptions: { slowMo: Number(process.env.SLOWMO) || 0 },
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: [

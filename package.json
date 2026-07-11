@@ -12,6 +12,7 @@
     "format": "biome format --write .",
     "e2e": "playwright test",
     "e2e:headed": "playwright test --headed",
+    "e2e:slow": "SLOWMO=800 playwright test --headed",
     "gen:api": "openapi-typescript http://localhost:8000/openapi.json -o src/api/schema.d.ts",
     "prepare": "git config core.hooksPath .githooks"
   },
