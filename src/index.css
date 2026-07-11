@@ -61,6 +61,16 @@
   }
 }
 
+/* honour reduced-motion for every decorative animation (the FLIP reorder gates itself in JS) */
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-twinkle,
+  .animate-halo,
+  .animate-pulse-dot {
+    animation: none;
+  }
+}
+
 html,
 body,
 #root {

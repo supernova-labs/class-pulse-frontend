@@ -13,7 +13,7 @@ export function NebulaStage({ hero, rest, total, overflow }: NebulaStageProps) {
   if (!hero) return null;
   return (
     <div className="grid h-full grid-cols-1 gap-10 lg:grid-cols-[42%_1fr] lg:gap-14">
-      <div className="relative flex flex-col justify-center gap-5">
+      <div className="relative isolate flex flex-col justify-center gap-5">
         <span
           aria-hidden
           className="pointer-events-none absolute top-1/2 left-1/2 -z-10 size-[540px] max-w-[130%] -translate-x-1/2 -translate-y-1/2 animate-halo rounded-full bg-[radial-gradient(closest-side,rgb(124_108_255/0.16),transparent_70%)]"

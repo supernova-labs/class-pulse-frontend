@@ -51,9 +51,10 @@ export function NewSessionForm({ hasActiveSession, onCreate }: NewSessionFormPro
       <button
         type="submit"
         disabled={!name.trim() || busy}
+        aria-busy={busy}
         className="flex shrink-0 items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
       >
-        {busy && <Spinner />}+ Nova sessão
+        {busy ? <Spinner /> : "+"} {busy ? "Criando…" : "Nova sessão"}
       </button>
       {error && (
         <p role="alert" className="w-full text-sm text-danger">

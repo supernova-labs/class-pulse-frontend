@@ -54,55 +54,57 @@ function SessionView({ code, participantId }: { code: string; participantId: str
   }
 
   return (
-    <main className="mx-auto min-h-dvh max-w-2xl bg-glow px-4 py-6">
+    <main className="relative isolate min-h-dvh bg-glow">
       <StarBackdrop />
-      <header className="flex items-center justify-between gap-3">
-        <p className="truncate text-sm text-muted">{session?.name ?? "…"}</p>
-        <p className="flex shrink-0 items-center gap-2 font-mono text-xs tracking-widest text-accent-soft">
-          {isEnded ? (
-            "ENCERRADA"
-          ) : (
-            <>
-              <LiveDot /> AO VIVO
-            </>
-          )}
-        </p>
-      </header>
+      <div className="mx-auto max-w-2xl px-4 py-6">
+        <header className="flex items-center justify-between gap-3">
+          <p className="truncate text-sm text-muted">{session?.name ?? "…"}</p>
+          <p className="flex shrink-0 items-center gap-2 font-mono text-xs tracking-widest text-accent-soft">
+            {isEnded ? (
+              "ENCERRADA"
+            ) : (
+              <>
+                <LiveDot /> AO VIVO
+              </>
+            )}
+          </p>
+        </header>
 
-      {isEnded ? (
-        <div className="mt-6 rounded-xl border border-surface bg-surface/30 px-4 py-3 text-center text-sm text-muted">
-          Sessão encerrada — as perguntas ficam aqui como histórico.
-        </div>
-      ) : session ? (
-        // gate on loaded session so an ended one is never briefly interactive
-        <>
-          <h1 className="mt-6 text-2xl font-semibold">O que você quer perguntar?</h1>
-          <div className="mt-4">
-            <AskForm onSubmit={handleAsk} />
+        {isEnded ? (
+          <div className="mt-6 rounded-xl border border-surface bg-surface/30 px-4 py-3 text-center text-sm text-muted">
+            Sessão encerrada — as perguntas ficam aqui como histórico.
           </div>
-        </>
-      ) : null}
+        ) : session ? (
+          // gate on loaded session so an ended one is never briefly interactive
+          <>
+            <h1 className="mt-6 text-2xl font-semibold">O que você quer perguntar?</h1>
+            <div className="mt-4">
+              <AskForm onSubmit={handleAsk} />
+            </div>
+          </>
+        ) : null}
 
-      {isLoading ? (
-        <p className="mt-10 text-center text-muted">Carregando…</p>
-      ) : questions.length === 0 ? (
-        <p className="mt-10 text-center text-muted">
-          Nenhuma pergunta ainda — seja a primeira pessoa a perguntar.
-        </p>
-      ) : (
-        <ul className="mt-6">
-          {questions.map((question, index) => (
-            <QuestionRow
-              key={question.id}
-              ref={registerRow(question.id)}
-              question={question}
-              index={index}
-              onToggleVote={handleToggleVote}
-              readOnly={isEnded || question.id === pendingVoteId}
-            />
-          ))}
-        </ul>
-      )}
+        {isLoading ? (
+          <p className="mt-10 text-center text-muted">Carregando…</p>
+        ) : questions.length === 0 ? (
+          <p className="mt-10 text-center text-muted">
+            Nenhuma pergunta ainda — seja a primeira pessoa a perguntar.
+          </p>
+        ) : (
+          <ul className="mt-6">
+            {questions.map((question, index) => (
+              <QuestionRow
+                key={question.id}
+                ref={registerRow(question.id)}
+                question={question}
+                index={index}
+                onToggleVote={handleToggleVote}
+                readOnly={isEnded || question.id === pendingVoteId}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
     </main>
   );
 }

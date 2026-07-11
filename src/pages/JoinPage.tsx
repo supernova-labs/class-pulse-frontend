@@ -75,10 +75,11 @@ export default function JoinPage() {
         <button
           type="submit"
           disabled={!code.trim() || joining}
+          aria-busy={joining}
           className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 font-medium text-white shadow-[0_0_32px_rgb(124_108_255/0.25)] transition-opacity disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
         >
           {joining && <Spinner />}
-          Entrar
+          {joining ? "Entrando…" : "Entrar"}
         </button>
         <p className="mt-4 text-center text-xs text-muted-strong">
           Sem nome? Você aparece como “Guest”.

@@ -7,7 +7,7 @@ export function Spinner({ className = "" }: SpinnerProps) {
   return (
     <span
       aria-hidden
-      className={`inline-block size-3.5 animate-spin rounded-full border-2 border-white/35 border-t-white ${className}`}
+      className={`inline-block size-3.5 animate-spin rounded-full border-2 border-white/35 border-t-white motion-reduce:animate-none ${className}`}
     />
   );
 }
