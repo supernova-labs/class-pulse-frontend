@@ -2,6 +2,8 @@ name: CI
 
 on:
   pull_request:
+    # labeled/unlabeled re-trigger so the no-adr label is picked up when applied late
+    types: [opened, synchronize, reopened, labeled, unlabeled]
   push:
     branches: [main]
 
