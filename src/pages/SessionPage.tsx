@@ -56,7 +56,7 @@ function SessionView({ code, participantId }: { code: string; participantId: str
   return (
     <main className="relative isolate min-h-dvh bg-glow">
       <StarBackdrop />
-      <div className="mx-auto max-w-2xl px-4 py-6">
+      <div className="relative z-10 mx-auto max-w-2xl px-4 py-6">
         <header className="flex items-center justify-between gap-3">
           <p className="truncate text-sm text-muted">{session?.name ?? "…"}</p>
           <p className="flex shrink-0 items-center gap-2 font-mono text-xs tracking-widest text-accent-soft">
