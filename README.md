@@ -3,7 +3,9 @@
 Live Q&A web app (Slido-style) for workshops: participant screen, admin panel and
 the "Nebulosa" big-screen view where questions float as stars sized by votes.
 React + TypeScript + Tailwind v4, built with Vite, managed with Bun. Product
-source of truth lives in the workspace root: `../SCOPE.md`.
+source of truth lives in the workspace root: `../SCOPE.md`. Architecture overview
+and decision records: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and
+[`docs/adr/`](docs/adr/).
 
 ## Requirements
 
