@@ -118,9 +118,7 @@ function AdminPanel({ onUnauthorized }: { onUnauthorized: () => void }) {
 
       {active && (
         <>
-          <h2 className="mt-8 font-mono text-xs tracking-[0.2em] text-muted-strong">
-            MODERAÇÃO
-          </h2>
+          <h2 className="mt-8 font-mono text-xs tracking-[0.2em] text-muted-strong">MODERAÇÃO</h2>
           <ModerationList
             questions={polling.questions}
             onToggleAnswered={handleToggleAnswered}

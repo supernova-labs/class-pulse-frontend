@@ -4,10 +4,7 @@ const config: Config = {
   testEnvironment: "jsdom",
   roots: ["<rootDir>/src"],
   transform: {
-    "^.+\\.(t|j)sx?$": [
-      "@swc/jest",
-      { jsc: { transform: { react: { runtime: "automatic" } } } },
-    ],
+    "^.+\\.(t|j)sx?$": ["@swc/jest", { jsc: { transform: { react: { runtime: "automatic" } } } }],
   },
   moduleNameMapper: {
     "\\.css$": "identity-obj-proxy",

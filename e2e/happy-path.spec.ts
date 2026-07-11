@@ -1,5 +1,5 @@
-import { expect, request, test } from "@playwright/test";
 import type { APIRequestContext } from "@playwright/test";
+import { expect, request, test } from "@playwright/test";
 
 const API_URL = process.env.VITE_API_URL ?? "http://127.0.0.1:8000";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "admin";
@@ -48,9 +48,7 @@ test.afterAll(async () => {
   await api.dispose();
 });
 
-test("participant joins, asks, votes and the question reaches the telão", async ({
-  browser,
-}) => {
+test("participant joins, asks, votes and the question reaches the telão", async ({ browser }) => {
   const uniqueBody = `Pergunta E2E ${Date.now()}?`;
 
   // Participant context
@@ -81,9 +79,9 @@ test("participant joins, asks, votes and the question reaches the telão", async
   const screenPage = await screen.newPage();
   await screenPage.goto(`/screen/${sessionCode}`);
   await expect(screenPage.getByText(uniqueBody)).toBeVisible({ timeout: 10_000 });
-  await expect(
-    screenPage.getByTestId("nebula-star").filter({ hasText: uniqueBody }),
-  ).toContainText("▲ 1");
+  await expect(screenPage.getByTestId("nebula-star").filter({ hasText: uniqueBody })).toContainText(
+    "▲ 1",
+  );
 
   await participant.close();
   await screen.close();

@@ -52,7 +52,13 @@ function SessionView({ code, participantId }: { code: string; participantId: str
       <header className="flex items-center justify-between gap-3">
         <p className="truncate text-sm text-muted">{session?.name ?? "…"}</p>
         <p className="flex shrink-0 items-center gap-2 font-mono text-xs tracking-widest text-accent-soft">
-          {isEnded ? "ENCERRADA" : <><LiveDot /> AO VIVO</>}
+          {isEnded ? (
+            "ENCERRADA"
+          ) : (
+            <>
+              <LiveDot /> AO VIVO
+            </>
+          )}
         </p>
       </header>
 

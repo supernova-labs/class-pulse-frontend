@@ -9,9 +9,7 @@ export function useVoteToggle(code: string, participantId: string) {
 
   return useMutation({
     mutationFn: ({ questionId, voted }: { questionId: string; voted: boolean }) =>
-      voted
-        ? unvoteQuestion(questionId, participantId)
-        : voteQuestion(questionId, participantId),
+      voted ? unvoteQuestion(questionId, participantId) : voteQuestion(questionId, participantId),
     onMutate: async ({ questionId, voted }) => {
       await queryClient.cancelQueries({ queryKey });
       const previous = queryClient.getQueryData<QuestionList>(queryKey);

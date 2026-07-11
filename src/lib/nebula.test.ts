@@ -42,10 +42,7 @@ describe("computeNebulaLayout", () => {
   });
 
   it("parks answered questions dimmed at a horizontal edge", () => {
-    const layout = computeNebulaLayout([
-      question("open", 5),
-      question("done", 9, "answered"),
-    ]);
+    const layout = computeNebulaLayout([question("open", 5), question("done", 9, "answered")]);
     const done = layout.stars.find((star) => star.id === "done");
     expect(done?.isLeaving).toBe(true);
     expect([3, 97]).toContain(done?.x);

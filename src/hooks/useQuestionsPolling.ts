@@ -13,8 +13,7 @@ export function useQuestionsPolling(code: string, participantId?: string, enable
     queryKey: questionsQueryKey(code, participantId),
     queryFn: () => getQuestions(code, participantId),
     enabled,
-    refetchInterval: (q) =>
-      q.state.data?.session.status === "ended" ? false : POLL_INTERVAL_MS,
+    refetchInterval: (q) => (q.state.data?.session.status === "ended" ? false : POLL_INTERVAL_MS),
     refetchIntervalInBackground: true,
   });
 

@@ -13,9 +13,7 @@ export function NewSessionForm({ hasActiveSession, onCreate }: NewSessionFormPro
 
   if (hasActiveSession) {
     return (
-      <p className="mt-2 text-sm text-muted-strong">
-        Encerre a sessão ativa para criar uma nova.
-      </p>
+      <p className="mt-2 text-sm text-muted-strong">Encerre a sessão ativa para criar uma nova.</p>
     );
   }
 

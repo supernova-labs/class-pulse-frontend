@@ -3,8 +3,8 @@ import { useParams } from "react-router";
 import { NebulaStage } from "../components/nebula/NebulaStage";
 import { StarField } from "../components/nebula/StarField";
 import { LiveDot } from "../components/ui/LiveDot";
-import { computeNebulaLayout } from "../lib/nebula";
 import { useQuestionsPolling } from "../hooks/useQuestionsPolling";
+import { computeNebulaLayout } from "../lib/nebula";
 
 export default function ScreenPage() {
   const { code = "" } = useParams();

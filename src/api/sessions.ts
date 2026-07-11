@@ -9,10 +9,7 @@ export async function joinSession(code: string, displayName?: string): Promise<P
   return unwrap(result);
 }
 
-export async function getQuestions(
-  code: string,
-  participantId?: string,
-): Promise<QuestionList> {
+export async function getQuestions(code: string, participantId?: string): Promise<QuestionList> {
   const result = await client.GET("/sessions/{code}/questions", {
     params: {
       path: { code },

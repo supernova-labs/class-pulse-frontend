@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { joinSession } from "../api/sessions";
-import { getStoredParticipant, saveParticipant } from "../lib/storage";
 import type { StoredParticipant } from "../lib/storage";
+import { getStoredParticipant, saveParticipant } from "../lib/storage";
 
 export function useParticipant(code: string) {
   const [participant, setParticipant] = useState<StoredParticipant | null>(() =>

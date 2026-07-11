@@ -1,6 +1,11 @@
 import { sortQuestions } from "./sortQuestions";
 
-const question = (id: string, votes: number, status = "open", createdAt = "2026-07-11T10:00:00Z") => ({
+const question = (
+  id: string,
+  votes: number,
+  status = "open",
+  createdAt = "2026-07-11T10:00:00Z",
+) => ({
   id,
   votes,
   status,
@@ -22,10 +27,7 @@ describe("sortQuestions", () => {
   });
 
   it("puts answered questions last regardless of votes", () => {
-    const sorted = sortQuestions([
-      question("answered", 99, "answered"),
-      question("open", 1),
-    ]);
+    const sorted = sortQuestions([question("answered", 99, "answered"), question("open", 1)]);
     expect(sorted.map((q) => q.id)).toEqual(["open", "answered"]);
   });
 
