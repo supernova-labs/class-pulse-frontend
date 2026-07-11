@@ -1,0 +1,11 @@
+#!/bin/sh
+# Class Pulse frontend pre-commit: biome check + jest.
+# Bypass (emergencies only): git commit --no-verify
+set -e
+cd "$(git rev-parse --show-toplevel)"
+
+echo "[pre-commit] biome check"
+bunx biome check .
+
+echo "[pre-commit] jest"
+bunx jest --ci

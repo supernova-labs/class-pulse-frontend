@@ -11,7 +11,8 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "e2e": "playwright test",
-    "gen:api": "openapi-typescript http://localhost:8000/openapi.json -o src/api/schema.d.ts"
+    "gen:api": "openapi-typescript http://localhost:8000/openapi.json -o src/api/schema.d.ts",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.9",
