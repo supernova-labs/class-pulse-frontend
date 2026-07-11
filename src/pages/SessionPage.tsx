@@ -5,8 +5,10 @@ import type { Question } from "../api/types";
 import { AskForm } from "../components/questions/AskForm";
 import { QuestionRow } from "../components/questions/QuestionRow";
 import { LiveDot } from "../components/ui/LiveDot";
+import { StarBackdrop } from "../components/ui/StarBackdrop";
 import { useParticipant } from "../hooks/useParticipant";
 import { questionsQueryKey, useQuestionsPolling } from "../hooks/useQuestionsPolling";
+import { useReorderAnimation } from "../hooks/useReorderAnimation";
 import { useVoteToggle } from "../hooks/useVoteToggle";
 
 export default function SessionPage() {
@@ -26,6 +28,7 @@ function SessionView({ code, participantId }: { code: string; participantId: str
     participantId,
   );
   const voteToggle = useVoteToggle(code, participantId);
+  const registerRow = useReorderAnimation(questions.map((question) => question.id).join(","));
 
   const handleAsk = async (body: string) => {
     await askQuestion(code, participantId, body);
@@ -41,7 +44,7 @@ function SessionView({ code, participantId }: { code: string; participantId: str
 
   if (error) {
     return (
-      <main className="flex min-h-dvh items-center justify-center p-6 text-center">
+      <main className="flex min-h-dvh items-center justify-center bg-glow p-6 text-center">
         <div>
           <p className="text-lg">Não conseguimos carregar essa sessão.</p>
           <p className="mt-2 text-sm text-muted">Confira o código ou tente recarregar.</p>
@@ -51,7 +54,8 @@ function SessionView({ code, participantId }: { code: string; participantId: str
   }
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-6">
+    <main className="mx-auto min-h-dvh max-w-2xl bg-glow px-4 py-6">
+      <StarBackdrop />
       <header className="flex items-center justify-between gap-3">
         <p className="truncate text-sm text-muted">{session?.name ?? "…"}</p>
         <p className="flex shrink-0 items-center gap-2 font-mono text-xs tracking-widest text-accent-soft">
@@ -87,10 +91,12 @@ function SessionView({ code, participantId }: { code: string; participantId: str
         </p>
       ) : (
         <ul className="mt-6">
-          {questions.map((question) => (
+          {questions.map((question, index) => (
             <QuestionRow
               key={question.id}
+              ref={registerRow(question.id)}
               question={question}
+              index={index}
               onToggleVote={handleToggleVote}
               readOnly={isEnded || question.id === pendingVoteId}
             />

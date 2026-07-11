@@ -1,4 +1,5 @@
 import type { Question } from "../../api/types";
+import { AnsweredIcon, TrashIcon } from "../ui/icons";
 
 interface ModerationListProps {
   questions: Question[];
@@ -31,22 +32,22 @@ export function ModerationList({ questions, onToggleAnswered, onDelete }: Modera
               title={answered ? "Reabrir pergunta" : "Marcar como respondida"}
               aria-label={answered ? "Reabrir pergunta" : "Marcar como respondida"}
               onClick={() => onToggleAnswered(question)}
-              className={`shrink-0 rounded-lg border px-2.5 py-1.5 text-sm ${
+              className={`inline-flex size-8 shrink-0 items-center justify-center rounded-lg border ${
                 answered
-                  ? "border-accent bg-accent/20 text-accent-soft"
-                  : "border-surface text-muted hover:border-muted-strong"
+                  ? "border-surface text-muted hover:border-muted-strong"
+                  : "border-accent/40 bg-accent/15 text-accent-soft hover:border-accent"
               }`}
             >
-              ✓
+              <AnsweredIcon />
             </button>
             <button
               type="button"
               title="Deletar pergunta"
               aria-label="Deletar pergunta"
               onClick={() => onDelete(question)}
-              className="shrink-0 rounded-lg border border-surface px-2.5 py-1.5 text-sm text-muted hover:border-danger-strong hover:text-danger"
+              className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-danger-strong/25 text-danger-strong/80 hover:border-danger-strong/50 hover:text-danger"
             >
-              🗑
+              <TrashIcon />
             </button>
           </li>
         );

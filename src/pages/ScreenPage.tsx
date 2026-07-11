@@ -1,21 +1,24 @@
-import { useMemo } from "react";
 import { useParams } from "react-router";
 import { ApiError } from "../api/client";
 import { NebulaStage } from "../components/nebula/NebulaStage";
 import { StarField } from "../components/nebula/StarField";
 import { LiveDot } from "../components/ui/LiveDot";
 import { useQuestionsPolling } from "../hooks/useQuestionsPolling";
-import { computeNebulaLayout } from "../lib/nebula";
+
+const MURAL_MAX = 24;
+
+const SCREEN_BG =
+  "radial-gradient(760px 480px at 24% 40%, rgb(124 108 255 / 0.12), transparent 62%), radial-gradient(520px 360px at 92% 108%, rgb(124 108 255 / 0.06), transparent 60%), #05050a";
 
 export default function ScreenPage() {
   const { code = "" } = useParams();
   const { session, questions, isEnded, isLoading, error } = useQuestionsPolling(code);
 
-  const layout = useMemo(() => computeNebulaLayout(questions), [questions]);
-  const questionsById = useMemo(
-    () => new Map(questions.map((question) => [question.id, question])),
-    [questions],
-  );
+  // the telão shows only open questions, already ranked by the API; the top one is the hero
+  const open = questions.filter((question) => question.status === "open");
+  const hero = open[0];
+  const rest = open.slice(1, 1 + MURAL_MAX);
+  const overflow = Math.max(0, open.length - 1 - rest.length);
 
   // only fail hard when there is no data yet; a live screen survives transient errors
   if (error && !session) {
@@ -32,40 +35,35 @@ export default function ScreenPage() {
   }
 
   return (
-    <main className="relative h-dvh overflow-hidden bg-[radial-gradient(ellipse_at_center,rgb(124_108_255/0.08),transparent_65%)]">
+    <main
+      className="relative h-dvh overflow-hidden text-foreground"
+      style={{ background: SCREEN_BG }}
+    >
       <StarField seed={code} />
 
-      <header className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-8 py-6">
-        <p className="flex items-center gap-2.5 text-lg text-muted">
+      <header className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-12 py-7">
+        <p className="flex items-center gap-2.5 text-lg">
           {isEnded ? (
-            <span className="rounded border border-muted-strong px-2 py-0.5 font-mono text-[10px] tracking-widest">
+            <span className="rounded border border-muted-strong px-2 py-0.5 font-mono text-[10px] tracking-widest text-muted">
               ENCERRADA
             </span>
           ) : (
             <LiveDot />
           )}
-          {session?.name ?? ""}
+          <span className="text-muted">{session?.name ?? ""}</span>
         </p>
-        <p className="font-mono text-2xl tracking-[0.15em] text-accent-soft">
-          {code.toUpperCase()}
-        </p>
+        <p className="font-mono text-2xl font-bold tracking-[0.15em]">{code.toUpperCase()}</p>
       </header>
 
-      <div className="absolute inset-x-0 top-20 bottom-12">
-        {isLoading ? null : questions.length === 0 ? (
+      <div className="absolute inset-x-0 top-24 bottom-10 px-12">
+        {isLoading ? null : open.length === 0 ? (
           <div className="flex h-full items-center justify-center">
-            <p className="animate-halo text-xl text-accent-soft">Aguardando perguntas…</p>
+            <p className="animate-halo text-2xl text-accent-soft">Aguardando perguntas…</p>
           </div>
         ) : (
-          <NebulaStage stars={layout.stars} questionsById={questionsById} />
+          <NebulaStage hero={hero} rest={rest} total={open.length} overflow={overflow} />
         )}
       </div>
-
-      {layout.overflow > 0 && (
-        <p className="absolute bottom-5 right-8 z-10 font-mono text-sm text-muted-strong">
-          +{layout.overflow} perguntas
-        </p>
-      )}
     </main>
   );
 }

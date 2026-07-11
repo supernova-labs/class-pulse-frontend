@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ApiError } from "../../api/client";
+import { Spinner } from "../ui/Spinner";
 
 interface NewSessionFormProps {
   hasActiveSession: boolean;
@@ -50,9 +51,9 @@ export function NewSessionForm({ hasActiveSession, onCreate }: NewSessionFormPro
       <button
         type="submit"
         disabled={!name.trim() || busy}
-        className="shrink-0 rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex shrink-0 items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
       >
-        + Nova sessão
+        {busy && <Spinner />}+ Nova sessão
       </button>
       {error && (
         <p role="alert" className="w-full text-sm text-danger">

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   createSession,
   deleteQuestion,
@@ -14,6 +14,7 @@ import { AdminLogin } from "../components/admin/AdminLogin";
 import { ModerationList } from "../components/admin/ModerationList";
 import { NewSessionForm } from "../components/admin/NewSessionForm";
 import { SessionHistory } from "../components/admin/SessionHistory";
+import { Spinner } from "../components/ui/Spinner";
 import { useAdminAuth } from "../hooks/useAdminAuth";
 import { useQuestionsPolling } from "../hooks/useQuestionsPolling";
 
@@ -29,6 +30,7 @@ export default function AdminPage() {
 function AdminPanel({ onUnauthorized }: { onUnauthorized: () => void }) {
   const queryClient = useQueryClient();
   const sessionsQuery = useQuery({ queryKey: ["admin", "sessions"], queryFn: listSessions });
+  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     if (sessionsQuery.error instanceof ApiError && sessionsQuery.error.status === 401) {
@@ -81,6 +83,12 @@ function AdminPanel({ onUnauthorized }: { onUnauthorized: () => void }) {
     }
   };
 
+  const handleLogout = () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    setTimeout(onUnauthorized, 500);
+  };
+
   const handleToggleAnswered = (question: Question) => {
     const status = question.status === "answered" ? "open" : "answered";
     if (status === "answered" && !window.confirm("Marcar esta pergunta como respondida?")) {
@@ -96,16 +104,18 @@ function AdminPanel({ onUnauthorized }: { onUnauthorized: () => void }) {
   };
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8">
+    <main className="mx-auto min-h-dvh max-w-3xl bg-glow px-4 py-8">
       <header className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">
           Class Pulse <span className="font-normal text-muted">Gestão</span>
         </h1>
         <button
           type="button"
-          onClick={onUnauthorized}
-          className="text-sm text-muted hover:text-foreground"
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground disabled:opacity-60"
         >
+          {loggingOut && <Spinner />}
           Sair
         </button>
       </header>
@@ -119,6 +129,7 @@ function AdminPanel({ onUnauthorized }: { onUnauthorized: () => void }) {
             session={active}
             questionCount={polling.questions.length}
             voteCount={voteCount}
+            ending={endMutation.isPending}
             onEnd={handleEnd}
           />
         ) : (
