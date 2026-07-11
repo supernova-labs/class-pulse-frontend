@@ -12,8 +12,18 @@ editar `src/api/schema.d.ts` na mão.
 ## Comandos
 
 ```
-bun run dev      # http://localhost:5173
-bun run test     # Jest
-bun run e2e      # Playwright (backend precisa estar rodando)
+bun run dev         # http://localhost:5173
+bun run test        # Jest
+bun run e2e         # Playwright — autocontido: sobe backend (8001, classpulse_test) + Vite (5174)
+bun run e2e:headed  # idem, com Chrome visível
+bun run lint        # biome check
+bun run format      # biome format --write
 bun run build
 ```
+
+## Time de Defesa
+
+- Pre-commit (`.githooks/pre-commit`, instalado pelo `bun install` via `prepare`):
+  biome check + jest. Bypass: `git commit --no-verify`.
+- E2E nunca toca o banco/servidores de dev; não rodar junto com `pytest` do backend
+  (compartilham `classpulse_test`). Porta 8001 presa: `lsof -ti:8001 | xargs kill`.
