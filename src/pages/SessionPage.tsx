@@ -36,6 +36,9 @@ function SessionView({ code, participantId }: { code: string; participantId: str
     voteToggle.mutate({ questionId: question.id, voted: question.voted_by_me });
   };
 
+  // serialize toggles per question: the button stays disabled while its request flies
+  const pendingVoteId = voteToggle.isPending ? voteToggle.variables?.questionId : undefined;
+
   if (error) {
     return (
       <main className="flex min-h-dvh items-center justify-center p-6 text-center">
@@ -66,14 +69,15 @@ function SessionView({ code, participantId }: { code: string; participantId: str
         <div className="mt-6 rounded-xl border border-surface bg-surface/30 px-4 py-3 text-center text-sm text-muted">
           Sessão encerrada — as perguntas ficam aqui como histórico.
         </div>
-      ) : (
+      ) : session ? (
+        // gate on loaded session so an ended one is never briefly interactive
         <>
           <h1 className="mt-6 text-2xl font-semibold">O que você quer perguntar?</h1>
           <div className="mt-4">
             <AskForm onSubmit={handleAsk} />
           </div>
         </>
-      )}
+      ) : null}
 
       {isLoading ? (
         <p className="mt-10 text-center text-muted">Carregando…</p>
@@ -88,7 +92,7 @@ function SessionView({ code, participantId }: { code: string; participantId: str
               key={question.id}
               question={question}
               onToggleVote={handleToggleVote}
-              readOnly={isEnded}
+              readOnly={isEnded || question.id === pendingVoteId}
             />
           ))}
         </ul>

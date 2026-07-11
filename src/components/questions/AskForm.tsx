@@ -47,7 +47,13 @@ export function AskForm({ onSubmit }: AskFormProps) {
         </button>
       </div>
       <div className="flex justify-between text-xs text-muted-strong">
-        {error ? <span className="text-danger">{error}</span> : <span />}
+        {error ? (
+          <span role="alert" className="text-danger">
+            {error}
+          </span>
+        ) : (
+          <span />
+        )}
         {body.length > MAX_LENGTH - 60 && (
           <span>
             {body.length}/{MAX_LENGTH}

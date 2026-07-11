@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { ApiError } from "../api/client";
 import { useParticipant } from "../hooks/useParticipant";
+import { getStoredParticipant } from "../lib/storage";
 
 export default function JoinPage() {
   const [searchParams] = useSearchParams();
@@ -16,6 +17,11 @@ export default function JoinPage() {
     event.preventDefault();
     const trimmedCode = code.trim().toUpperCase();
     if (!trimmedCode || joining) return;
+    // already joined on this device: reuse the identity (keeps voted_by_me intact)
+    if (getStoredParticipant(trimmedCode)) {
+      navigate(`/s/${trimmedCode}`);
+      return;
+    }
     setJoining(true);
     setError(null);
     try {
@@ -60,7 +66,11 @@ export default function JoinPage() {
           maxLength={60}
           className="mt-3 w-full rounded-xl border border-surface bg-background/60 px-4 py-3 text-center placeholder:text-muted-strong focus:border-accent focus:outline-none"
         />
-        {error && <p className="mt-3 text-center text-sm text-danger">{error}</p>}
+        {error && (
+          <p role="alert" className="mt-3 text-center text-sm text-danger">
+            {error}
+          </p>
+        )}
         <button
           type="submit"
           disabled={!code.trim() || joining}

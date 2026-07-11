@@ -38,7 +38,7 @@ export function NewSessionForm({ hasActiveSession, onCreate }: NewSessionFormPro
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mt-2 flex gap-2">
+    <form onSubmit={handleSubmit} className="mt-2 flex flex-wrap gap-2">
       <input
         value={name}
         onChange={(event) => setName(event.target.value)}
@@ -54,7 +54,11 @@ export function NewSessionForm({ hasActiveSession, onCreate }: NewSessionFormPro
       >
         + Nova sessão
       </button>
-      {error && <p className="w-full text-sm text-danger">{error}</p>}
+      {error && (
+        <p role="alert" className="w-full text-sm text-danger">
+          {error}
+        </p>
+      )}
     </form>
   );
 }

@@ -1,11 +1,7 @@
+import type { Question } from "../api/types";
 import { sortQuestions } from "./sortQuestions";
 
-interface NebulaQuestion {
-  id: string;
-  status: string;
-  votes: number;
-  created_at: string;
-}
+type NebulaQuestion = Pick<Question, "id" | "status" | "votes" | "created_at" | "answered_at">;
 
 export interface StarPlacement {
   id: string;
@@ -42,11 +38,15 @@ export function computeNebulaLayout(
   questions: NebulaQuestion[],
   maxStars: number = MAX_STARS,
 ): NebulaLayout {
-  const visible = questions.filter((question) => question.status !== "deleted");
-  const open = sortQuestions(visible.filter((question) => question.status === "open"));
-  const answered = sortQuestions(visible.filter((question) => question.status === "answered"));
+  const open = sortQuestions(questions.filter((question) => question.status === "open"));
+  // most recently answered first, so fresh answers get the parked-edge spots
+  const answered = questions
+    .filter((question) => question.status === "answered")
+    .sort((a, b) => (b.answered_at ?? b.created_at).localeCompare(a.answered_at ?? a.created_at));
 
-  const starring = open.slice(0, maxStars);
+  // orbit slots wrap after ORBIT.length; more stars than slots would overlap
+  const effectiveMax = Math.min(maxStars, 1 + ORBIT.length);
+  const starring = open.slice(0, effectiveMax);
   const maxVotes = Math.max(1, ...starring.map((question) => question.votes));
 
   const stars: StarPlacement[] = starring.map((question, rank) => {

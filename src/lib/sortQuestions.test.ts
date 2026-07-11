@@ -31,6 +31,16 @@ describe("sortQuestions", () => {
     expect(sorted.map((q) => q.id)).toEqual(["open", "answered"]);
   });
 
+  it("orders within the answered group by votes then created_at", () => {
+    const sorted = sortQuestions([
+      question("a-low", 1, "answered"),
+      question("a-late", 5, "answered", "2026-07-11T11:00:00Z"),
+      question("a-early", 5, "answered", "2026-07-11T10:00:00Z"),
+      question("open", 0),
+    ]);
+    expect(sorted.map((q) => q.id)).toEqual(["open", "a-early", "a-late", "a-low"]);
+  });
+
   it("does not mutate the input", () => {
     const input = [question("a", 1), question("b", 5)];
     sortQuestions(input);

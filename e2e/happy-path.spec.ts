@@ -68,11 +68,11 @@ test("participant joins, asks, votes and the question reaches the telão", async
   // Vote toggle: vote, unvote, vote again
   const voteButton = page.getByRole("button", { name: "Votar" });
   await voteButton.click();
-  await expect(page.getByRole("button", { name: "Remover voto" })).toHaveText(/1/);
+  await expect(page.getByRole("button", { name: "Remover voto" })).toHaveText(/^▲\s*1$/);
   await page.getByRole("button", { name: "Remover voto" }).click();
-  await expect(page.getByRole("button", { name: "Votar" })).toHaveText(/0/);
+  await expect(page.getByRole("button", { name: "Votar" })).toHaveText(/^▲\s*0$/);
   await page.getByRole("button", { name: "Votar" }).click();
-  await expect(page.getByRole("button", { name: "Remover voto" })).toHaveText(/1/);
+  await expect(page.getByRole("button", { name: "Remover voto" })).toHaveText(/^▲\s*1$/);
 
   // Telão context: question appears via polling with its vote count
   const screen = await browser.newContext();

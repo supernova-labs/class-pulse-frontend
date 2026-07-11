@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useParams } from "react-router";
+import { ApiError } from "../api/client";
 import { NebulaStage } from "../components/nebula/NebulaStage";
 import { StarField } from "../components/nebula/StarField";
 import { LiveDot } from "../components/ui/LiveDot";
@@ -16,10 +17,16 @@ export default function ScreenPage() {
     [questions],
   );
 
-  if (error) {
+  // only fail hard when there is no data yet; a live screen survives transient errors
+  if (error && !session) {
+    const notFound = error instanceof ApiError && error.status === 404;
     return (
       <main className="flex h-dvh items-center justify-center bg-background">
-        <p className="text-muted">Sessão não encontrada — confira o código.</p>
+        <p className="text-muted">
+          {notFound
+            ? "Sessão não encontrada — confira o código."
+            : "Não foi possível carregar o telão — verifique a conexão."}
+        </p>
       </main>
     );
   }

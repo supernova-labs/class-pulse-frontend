@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { unvoteQuestion, voteQuestion } from "../api/sessions";
-import type { QuestionList } from "../api/types";
+import type { Question, QuestionList } from "../api/types";
 import { questionsQueryKey } from "./useQuestionsPolling";
 
 export function useVoteToggle(code: string, participantId: string) {
@@ -12,7 +12,9 @@ export function useVoteToggle(code: string, participantId: string) {
       voted ? unvoteQuestion(questionId, participantId) : voteQuestion(questionId, participantId),
     onMutate: async ({ questionId, voted }) => {
       await queryClient.cancelQueries({ queryKey });
-      const previous = queryClient.getQueryData<QuestionList>(queryKey);
+      const previousQuestion = queryClient
+        .getQueryData<QuestionList>(queryKey)
+        ?.questions.find((q) => q.id === questionId);
       queryClient.setQueryData<QuestionList>(queryKey, (data) =>
         data
           ? {
@@ -25,10 +27,20 @@ export function useVoteToggle(code: string, participantId: string) {
             }
           : data,
       );
-      return { previous };
+      return { previousQuestion };
     },
-    onError: (_error, _vars, context) => {
-      if (context?.previous) queryClient.setQueryData(queryKey, context.previous);
+    onError: (_error, { questionId }, context) => {
+      // roll back only the affected question so other in-flight votes survive
+      const previous = context?.previousQuestion;
+      if (!previous) return;
+      queryClient.setQueryData<QuestionList>(queryKey, (data) =>
+        data
+          ? {
+              ...data,
+              questions: data.questions.map((q): Question => (q.id === questionId ? previous : q)),
+            }
+          : data,
+      );
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });

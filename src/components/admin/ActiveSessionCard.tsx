@@ -15,13 +15,18 @@ export function ActiveSessionCard({
   voteCount,
   onEnd,
 }: ActiveSessionCardProps) {
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
+  const joinUrl = `${window.location.origin}/join?code=${encodeURIComponent(session.code)}`;
 
   const copyLink = async () => {
-    const url = `${window.location.origin}/join?code=${encodeURIComponent(session.code)}`;
-    await navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(joinUrl);
+      setCopyState("copied");
+      setTimeout(() => setCopyState("idle"), 2000);
+    } catch {
+      // clipboard unavailable/denied: show the link for manual copy
+      setCopyState("failed");
+    }
   };
 
   return (
@@ -54,7 +59,7 @@ export function ActiveSessionCard({
           onClick={copyLink}
           className="rounded-xl border border-surface px-4 py-2 text-sm hover:border-muted-strong"
         >
-          {copied ? "✓ Copiado" : "⧉ Copiar link"}
+          {copyState === "copied" ? "✓ Copiado" : "⧉ Copiar link"}
         </button>
         <button
           type="button"
@@ -64,6 +69,11 @@ export function ActiveSessionCard({
           Encerrar sessão
         </button>
       </div>
+      {copyState === "failed" && (
+        <p role="alert" className="mt-3 text-xs text-muted">
+          Não consegui copiar — use o link: <span className="font-mono select-all">{joinUrl}</span>
+        </p>
+      )}
     </section>
   );
 }

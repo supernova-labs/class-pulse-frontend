@@ -1,10 +1,16 @@
 import { computeNebulaLayout, MAX_STARS } from "./nebula";
 
-const question = (id: string, votes: number, status = "open") => ({
+const question = (
+  id: string,
+  votes: number,
+  status: "open" | "answered" = "open",
+  answeredAt: string | null = null,
+) => ({
   id,
   votes,
   status,
   created_at: `2026-07-11T10:00:0${id.length % 10}Z`,
+  answered_at: answeredAt ?? (status === "answered" ? "2026-07-11T11:00:00Z" : null),
 });
 
 describe("computeNebulaLayout", () => {
@@ -47,6 +53,29 @@ describe("computeNebulaLayout", () => {
     expect(done?.isLeaving).toBe(true);
     expect([3, 97]).toContain(done?.x);
     expect(done!.brightness).toBeLessThan(0.2);
+  });
+
+  it("parks the most recently answered questions, not the most voted", () => {
+    const questions = [
+      question("open", 1),
+      question("old-popular-1", 90, "answered", "2026-07-11T11:00:01Z"),
+      question("old-popular-2", 80, "answered", "2026-07-11T11:00:02Z"),
+      question("old-popular-3", 70, "answered", "2026-07-11T11:00:03Z"),
+      question("old-popular-4", 60, "answered", "2026-07-11T11:00:04Z"),
+      question("fresh", 1, "answered", "2026-07-11T12:00:00Z"),
+    ];
+    const layout = computeNebulaLayout(questions);
+    const parked = layout.stars.filter((star) => star.isLeaving).map((star) => star.id);
+    expect(parked).toContain("fresh");
+    expect(parked).not.toContain("old-popular-1");
+  });
+
+  it("clamps maxStars to the available slots", () => {
+    const questions = Array.from({ length: 30 }, (_, i) => question(`q${i}`, i));
+    const layout = computeNebulaLayout(questions, 20);
+    const visible = layout.stars.filter((star) => !star.isLeaving);
+    expect(visible).toHaveLength(MAX_STARS);
+    expect(layout.overflow).toBe(30 - MAX_STARS);
   });
 
   it("keeps at most 4 answered stars", () => {

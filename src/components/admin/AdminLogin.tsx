@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ApiError } from "../../api/client";
 
 interface AdminLoginProps {
   onLogin: (password: string) => Promise<void>;
@@ -16,8 +17,12 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
     setError(null);
     try {
       await onLogin(password);
-    } catch {
-      setError("Senha incorreta.");
+    } catch (err) {
+      setError(
+        err instanceof ApiError && err.status === 401
+          ? "Senha incorreta."
+          : "Não foi possível conectar. Tente de novo.",
+      );
     } finally {
       setBusy(false);
     }
@@ -34,13 +39,18 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
         </h1>
         <input
           type="password"
+          autoComplete="current-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           placeholder="Senha de admin"
           aria-label="Senha de admin"
           className="mt-6 w-full rounded-xl border border-surface bg-background/60 px-4 py-3 text-center placeholder:text-muted-strong focus:border-accent focus:outline-none"
         />
-        {error && <p className="mt-3 text-center text-sm text-danger">{error}</p>}
+        {error && (
+          <p role="alert" className="mt-3 text-center text-sm text-danger">
+            {error}
+          </p>
+        )}
         <button
           type="submit"
           disabled={!password || busy}

@@ -10,7 +10,7 @@ jest.mock("../api/sessions", () => ({
   unvoteQuestion: jest.fn(),
 }));
 
-import { voteQuestion } from "../api/sessions";
+import { unvoteQuestion, voteQuestion } from "../api/sessions";
 
 const CODE = "TW-1234";
 const PARTICIPANT = "participant-1";
@@ -52,6 +52,8 @@ function setup() {
 }
 
 describe("useVoteToggle", () => {
+  beforeEach(() => jest.clearAllMocks());
+
   it("optimistically increments votes and flips voted_by_me before the server resolves", async () => {
     let resolveVote: () => void = () => {};
     (voteQuestion as jest.Mock).mockImplementation(
@@ -79,5 +81,35 @@ describe("useVoteToggle", () => {
     const data = queryClient.getQueryData<QuestionList>(key);
     expect(data?.questions[0].votes).toBe(2);
     expect(data?.questions[0].voted_by_me).toBe(false);
+  });
+
+  it("unvotes through unvoteQuestion and optimistically decrements", async () => {
+    let resolveUnvote: () => void = () => {};
+    (unvoteQuestion as jest.Mock).mockImplementation(
+      () => new Promise<void>((resolve) => (resolveUnvote = resolve)),
+    );
+    const { queryClient, key, result } = setup();
+
+    act(() => result.current.mutate({ questionId: "q1", voted: true }));
+
+    await waitFor(() => {
+      const data = queryClient.getQueryData<QuestionList>(key);
+      expect(data?.questions[0].votes).toBe(1);
+      expect(data?.questions[0].voted_by_me).toBe(false);
+    });
+    expect(unvoteQuestion).toHaveBeenCalledWith("q1", PARTICIPANT);
+    expect(voteQuestion).not.toHaveBeenCalled();
+    act(() => resolveUnvote());
+  });
+
+  it("rolls back a failed unvote", async () => {
+    (unvoteQuestion as jest.Mock).mockRejectedValue(new Error("boom"));
+    const { queryClient, key, result } = setup();
+
+    act(() => result.current.mutate({ questionId: "q1", voted: true }));
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    const data = queryClient.getQueryData<QuestionList>(key);
+    expect(data?.questions[0].votes).toBe(2);
   });
 });

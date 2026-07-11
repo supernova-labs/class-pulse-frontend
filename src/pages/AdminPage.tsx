@@ -45,14 +45,32 @@ function AdminPanel({ onUnauthorized }: { onUnauthorized: () => void }) {
     queryClient.invalidateQueries({ queryKey: ["questions"] });
   };
 
-  const endMutation = useMutation({ mutationFn: endSession, onSuccess: invalidateAll });
-  const createMutation = useMutation({ mutationFn: createSession, onSuccess: invalidateAll });
+  // an expired/revoked token must send the admin back to the login screen
+  const handleMutationError = (error: unknown) => {
+    if (error instanceof ApiError && error.status === 401) onUnauthorized();
+  };
+
+  const endMutation = useMutation({
+    mutationFn: endSession,
+    onSuccess: invalidateAll,
+    onError: handleMutationError,
+  });
+  const createMutation = useMutation({
+    mutationFn: createSession,
+    onSuccess: invalidateAll,
+    onError: handleMutationError,
+  });
   const moderateMutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: "open" | "answered" }) =>
       moderateQuestion(id, status),
     onSuccess: invalidateAll,
+    onError: handleMutationError,
   });
-  const deleteMutation = useMutation({ mutationFn: deleteQuestion, onSuccess: invalidateAll });
+  const deleteMutation = useMutation({
+    mutationFn: deleteQuestion,
+    onSuccess: invalidateAll,
+    onError: handleMutationError,
+  });
 
   const polling = useQuestionsPolling(active?.code ?? "", undefined, active !== undefined);
   const voteCount = polling.questions.reduce((sum, question) => sum + question.votes, 0);

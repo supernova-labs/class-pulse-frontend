@@ -4,25 +4,29 @@ const memory = new Map<string, string>();
 
 function get(key: string): string | null {
   try {
-    return localStorage.getItem(key);
+    const value = localStorage.getItem(key);
+    if (value !== null) return value;
   } catch {
-    return memory.get(key) ?? null;
+    // fall through to memory
   }
+  return memory.get(key) ?? null;
 }
 
 function set(key: string, value: string): void {
+  memory.set(key, value);
   try {
     localStorage.setItem(key, value);
   } catch {
-    memory.set(key, value);
+    // memory already holds the value
   }
 }
 
 function remove(key: string): void {
+  memory.delete(key);
   try {
     localStorage.removeItem(key);
   } catch {
-    memory.delete(key);
+    // memory already cleared
   }
 }
 
@@ -38,7 +42,11 @@ export function getStoredParticipant(code: string): StoredParticipant | null {
   const raw = get(participantKey(code));
   if (!raw) return null;
   try {
-    return JSON.parse(raw) as StoredParticipant;
+    const parsed = JSON.parse(raw) as Partial<StoredParticipant>;
+    if (typeof parsed.participantId === "string" && typeof parsed.displayName === "string") {
+      return { participantId: parsed.participantId, displayName: parsed.displayName };
+    }
+    return null;
   } catch {
     return null;
   }

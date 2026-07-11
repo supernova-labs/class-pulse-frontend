@@ -52,6 +52,13 @@ function HistoryRow({ session }: { session: AdminSession }) {
         <div className="mt-2 pl-2">
           {questions.isLoading ? (
             <p className="text-sm text-muted">Carregando…</p>
+          ) : questions.isError ? (
+            <p role="alert" className="text-sm text-danger">
+              Não foi possível carregar o histórico.{" "}
+              <button type="button" className="underline" onClick={() => questions.refetch()}>
+                Tentar de novo
+              </button>
+            </p>
           ) : (
             <ul>
               {(questions.data?.questions ?? []).map((question) => (
