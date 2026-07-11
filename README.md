@@ -45,6 +45,15 @@ bun run format     # biome format --write
 `src/api/schema.d.ts` is generated and excluded from Biome. The pre-commit hook is
 installed automatically by `bun install`; bypass with `git commit --no-verify`.
 
+## CI/CD
+
+Every PR runs biome, jest, the production build, a contract-drift check (regenerates
+`src/api/schema.d.ts` from the backend's committed `openapi.json` and fails on diff)
+and an ADR gate (architectural changes require a `docs/adr/` entry or the `no-adr`
+label). Merging to `main` builds the nginx image (with `VITE_API_URL` from the
+`API_URL` repo variable) and deploys to Cloud Run (`class-pulse-web`,
+southamerica-east1). See `docs/adr/0001`.
+
 ## API contract
 
 Types in `src/api/schema.d.ts` are generated from the backend OpenAPI schema:

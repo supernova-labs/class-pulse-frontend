@@ -12,7 +12,7 @@ let token: string;
 test.beforeAll(async () => {
   api = await request.newContext({ baseURL: API_URL });
 
-  const health = await api.get("/healthz").catch(() => null);
+  const health = await api.get("/health").catch(() => null);
   if (!health?.ok()) {
     throw new Error(`Backend not reachable at ${API_URL} — start it before running e2e.`);
   }
