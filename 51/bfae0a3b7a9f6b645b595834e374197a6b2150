@@ -1,0 +1,19 @@
+.gitignore
+  s_b75a33dd204a9a::t_69c5eb6636d3ba 31-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "51bfae0a3b7a9f6b645b595834e374197a6b2150",
+  "prompts": {},
+  "sessions": {
+    "s_b75a33dd204a9a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3d259997-bbc5-4391-8e42-2398e153c135",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Luis Novo <lfnovo@gmail.com>"
+    }
+  }
+}
