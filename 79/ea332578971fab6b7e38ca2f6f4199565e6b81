@@ -1,0 +1,28 @@
+src/hooks/useQuestionsPolling.ts
+  s_b75a33dd204a9a::t_57ec049cab6028 1-2,4-5,14-15,17,24-41
+  s_0bd7632f7c5be7::t_938a755a100009 42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "79ea332578971fab6b7e38ca2f6f4199565e6b81",
+  "prompts": {},
+  "sessions": {
+    "s_0bd7632f7c5be7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f57c4-cb32-7052-b2e9-5f8c9be9bc72",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Luis Novo <lfnovo@gmail.com>"
+    },
+    "s_b75a33dd204a9a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3d259997-bbc5-4391-8e42-2398e153c135",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Luis Novo <lfnovo@gmail.com>"
+    }
+  }
+}
