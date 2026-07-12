@@ -1,0 +1,20 @@
+ARCHITECTURE.md
+  s_b75a33dd204a9a::t_956957526286cb 1-60
+  s_b75a33dd204a9a::t_38b0523418a303 61-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "24e2d74ba86aeaa2560e2b5391164c1808e41d3b",
+  "prompts": {},
+  "sessions": {
+    "s_b75a33dd204a9a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3d259997-bbc5-4391-8e42-2398e153c135",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Luis Novo <lfnovo@gmail.com>"
+    }
+  }
+}
