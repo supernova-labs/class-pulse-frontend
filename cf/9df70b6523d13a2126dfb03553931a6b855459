@@ -1,0 +1,22 @@
+src/lib/formatText.test.ts
+  s_e771dda10d67a2::t_bd1507771fb30c 29
+  s_e771dda10d67a2::t_af75200afc1b17 21-28,30-34
+src/lib/formatText.ts
+  s_e771dda10d67a2::t_4e801afbbab9f3 5-12,14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "cf9df70b6523d13a2126dfb03553931a6b855459",
+  "prompts": {},
+  "sessions": {
+    "s_e771dda10d67a2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "662acb7f-db3a-4dca-bb5e-0b1672cb0410",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Luis Novo <lfnovo@gmail.com>"
+    }
+  }
+}
