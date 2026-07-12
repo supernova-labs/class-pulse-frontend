@@ -1,0 +1,19 @@
+.github/workflows/codex-review.yml
+  s_b75a33dd204a9a::t_a410f57e96d745 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "fac748793989982b90da497068c9faa2138564b9",
+  "prompts": {},
+  "sessions": {
+    "s_b75a33dd204a9a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3d259997-bbc5-4391-8e42-2398e153c135",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Luis Novo <lfnovo@gmail.com>"
+    }
+  }
+}
