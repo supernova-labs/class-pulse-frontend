@@ -18,4 +18,18 @@ describe("formatText", () => {
   it("leaves plain text untouched", () => {
     expect(formatText("uma pergunta simples")).toBe("uma pergunta simples");
   });
+
+  it("escapes <style> tags as literal text", () => {
+    expect(formatText("<style>body{display:none}</style>")).toBe(
+      "&lt;style&gt;body{display:none}&lt;/style&gt;",
+    );
+  });
+
+  it("escapes <img onerror> as literal text", () => {
+    expect(formatText("<img src=x onerror=alert(1)>")).toBe("&lt;img src=x onerror=alert(1)&gt;");
+  });
+
+  it("escapes raw HTML bold tags as literal text", () => {
+    expect(formatText("<b>raw bold</b>")).toBe("&lt;b&gt;raw bold&lt;/b&gt;");
+  });
 });
