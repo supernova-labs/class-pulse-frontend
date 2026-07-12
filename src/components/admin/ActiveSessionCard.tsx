@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { AdminSession } from "../../api/types";
+import { buildJoinUrl } from "../../lib/joinUrl";
 import { CheckIcon, CopyIcon } from "../ui/icons";
 import { LiveDot } from "../ui/LiveDot";
 import { Spinner } from "../ui/Spinner";
@@ -24,7 +25,7 @@ export function ActiveSessionCard({
 }: ActiveSessionCardProps) {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
   const copied = copyState === "copied";
-  const joinUrl = `${window.location.origin}/join?code=${encodeURIComponent(session.code)}`;
+  const joinUrl = buildJoinUrl(session.code);
 
   const copyLink = async () => {
     try {

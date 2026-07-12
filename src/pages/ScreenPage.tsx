@@ -2,6 +2,7 @@ import { useParams } from "react-router";
 import { ApiError } from "../api/client";
 import { NebulaStage } from "../components/nebula/NebulaStage";
 import { StarField } from "../components/nebula/StarField";
+import { JoinQr } from "../components/screen/JoinQr";
 import { LiveDot } from "../components/ui/LiveDot";
 import { useQuestionsPolling } from "../hooks/useQuestionsPolling";
 
@@ -58,10 +59,15 @@ export default function ScreenPage() {
       <div className="absolute inset-x-0 top-24 bottom-10 px-12">
         {isLoading ? null : open.length === 0 ? (
           <div className="flex h-full items-center justify-center">
-            <p className="animate-halo text-2xl text-accent-soft">Aguardando perguntas…</p>
+            <JoinQr code={code} variant="hero" />
           </div>
         ) : (
-          <NebulaStage hero={hero} rest={rest} total={open.length} overflow={overflow} />
+          <>
+            <NebulaStage hero={hero} rest={rest} total={open.length} overflow={overflow} />
+            <div className="fixed bottom-4 left-4 z-20">
+              <JoinQr code={code} variant="chip" />
+            </div>
+          </>
         )}
       </div>
     </main>
