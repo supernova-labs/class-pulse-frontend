@@ -1,0 +1,36 @@
+package.json
+  s_7e640b350e757b::t_aeb494a9133987 24
+src/components/admin/ActiveSessionCard.tsx
+  s_7e640b350e757b::t_f175d26f5fbacf 3
+  s_7e640b350e757b::t_4a2e7e60b2449d 28
+src/lib/joinUrl.test.ts
+  s_7e640b350e757b::t_30d3e2abdfd35c 1-13
+src/lib/joinUrl.ts
+  s_7e640b350e757b::t_49a833cf0cfd41 1-3
+src/components/screen/JoinQr.tsx
+  s_7e640b350e757b::t_e2d93fb2f2df1f 1-13,19-24,30-39
+  s_7e640b350e757b::t_33329ab8ad8021 14-18,25-29
+src/pages/ScreenPage.tsx
+  s_7e640b350e757b::t_49bea6317c2311 5
+  s_7e640b350e757b::t_a0299e81d37c3f 62,65-70
+src/components/screen/JoinQr.test.tsx
+  s_7e640b350e757b::t_a156a096b1a11a 1-15
+bun.lock
+  s_7e640b350e757b::t_d9ce8675a4f22b 12,822-823
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "68ea3037edca715f5231b49473ae8fa48b2ada0a",
+  "prompts": {},
+  "sessions": {
+    "s_7e640b350e757b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7414da9-480b-4cb8-a11c-ab8c7907e286",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Luis Novo <lfnovo@gmail.com>"
+    }
+  }
+}
