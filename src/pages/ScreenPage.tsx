@@ -8,8 +8,8 @@ import { useQuestionsPolling } from "../hooks/useQuestionsPolling";
 
 const MURAL_MAX = 24;
 
-// kept small enough to fit the header space the stage reserves below it (top-24)
-const QR_SIZE = 120;
+// sized for projection: read from a few metres away, across the room
+const QR_SIZE = 160;
 
 const SCREEN_BG =
   "radial-gradient(760px 480px at 24% 40%, rgb(124 108 255 / 0.12), transparent 62%), radial-gradient(520px 360px at 92% 108%, rgb(124 108 255 / 0.06), transparent 60%), #05050a";
@@ -43,12 +43,13 @@ export default function ScreenPage() {
 
   return (
     <main
-      className="relative h-dvh overflow-hidden text-foreground"
+      className="relative flex h-dvh flex-col overflow-hidden text-foreground"
       style={{ background: SCREEN_BG }}
     >
       <StarField seed={code} />
 
-      <header className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-12 py-7">
+      {/* the header sizes itself (the QR card drives its height); the stage takes what is left */}
+      <header className="relative z-10 flex shrink-0 items-start justify-between px-12 py-7">
         <p className="flex items-center gap-2.5 text-lg">
           {isEnded ? (
             <span className="rounded border border-muted-strong px-2 py-0.5 font-mono text-[10px] tracking-widest text-muted">
@@ -77,7 +78,7 @@ export default function ScreenPage() {
         )}
       </header>
 
-      <div className="absolute inset-x-0 top-24 bottom-10 px-12">
+      <div className="relative z-10 min-h-0 flex-1 px-12 pb-10">
         {isLoading ? null : open.length === 0 ? (
           <div className="flex h-full items-center justify-center">
             <p className="animate-halo text-2xl text-accent-soft">Aguardando perguntas…</p>
