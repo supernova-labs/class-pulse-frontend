@@ -32,11 +32,8 @@ export function NebulaStage({ hero, rest, total, overflow }: NebulaStageProps) {
           <span className="inline-flex items-center gap-2 rounded-full border border-accent/50 bg-accent/15 px-4 py-1.5 text-lg font-semibold text-accent-soft shadow-[0_0_24px_rgb(124_108_255/0.25)]">
             <UpvoteIcon /> {hero.votes}
           </span>
-          {/* show the asker as a highlighted @mention */}
-          <span
-            className="text-muted"
-            dangerouslySetInnerHTML={{ __html: formatText(`@${hero.author_name}`) }}
-          />
+          {/* show the asker as a highlighted @mention; plain text, so React escapes it */}
+          <span className="text-muted">@{hero.author_name}</span>
         </div>
       </div>
 
