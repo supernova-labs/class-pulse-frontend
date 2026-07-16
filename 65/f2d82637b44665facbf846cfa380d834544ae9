@@ -1,0 +1,19 @@
+src/pages/ScreenPage.tsx
+  s_f85ae19655c799::t_8de27b6606de0f 21-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "65f2d82637b44665facbf846cfa380d834544ae9",
+  "prompts": {},
+  "sessions": {
+    "s_f85ae19655c799": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6fbb728f-0223-4aae-a089-c9783cd24dcb",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Luis Novo <lfnovo@gmail.com>"
+    }
+  }
+}
