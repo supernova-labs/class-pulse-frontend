@@ -1,3 +1,4 @@
+import { QRCodeSVG } from "qrcode.react";
 import { useParams } from "react-router";
 import { ApiError } from "../api/client";
 import { NebulaStage } from "../components/nebula/NebulaStage";
@@ -7,12 +8,18 @@ import { useQuestionsPolling } from "../hooks/useQuestionsPolling";
 
 const MURAL_MAX = 24;
 
+// kept small enough to fit the header space the stage reserves below it (top-24)
+const QR_SIZE = 120;
+
 const SCREEN_BG =
   "radial-gradient(760px 480px at 24% 40%, rgb(124 108 255 / 0.12), transparent 62%), radial-gradient(520px 360px at 92% 108%, rgb(124 108 255 / 0.06), transparent 60%), #05050a";
 
 export default function ScreenPage() {
   const { code = "" } = useParams();
   const { session, questions, isEnded, isLoading, error } = useQuestionsPolling(code);
+
+  // the /s/:code route drops the participant straight into the session, no code typing
+  const joinUrl = `${window.location.origin}/s/${code}`;
 
   // the telão shows only open questions, already ranked by the API; the top one is the hero
   const open = questions.filter((question) => question.status === "open");
@@ -52,7 +59,22 @@ export default function ScreenPage() {
           )}
           <span className="text-muted">{session?.name ?? ""}</span>
         </p>
-        <p className="font-mono text-2xl font-bold tracking-[0.15em]">{code.toUpperCase()}</p>
+        {code && (
+          <div className="flex flex-col items-center gap-2 rounded-lg bg-white p-2.5">
+            <QRCodeSVG
+              value={joinUrl}
+              size={QR_SIZE}
+              level="M"
+              marginSize={2}
+              bgColor="#ffffff"
+              fgColor="#06060a"
+              title={`Escaneie para entrar na sessão ${code.toUpperCase()}`}
+            />
+            <p className="font-mono text-xl font-bold tracking-[0.15em] whitespace-nowrap text-background">
+              {code.toUpperCase()}
+            </p>
+          </div>
+        )}
       </header>
 
       <div className="absolute inset-x-0 top-24 bottom-10 px-12">
