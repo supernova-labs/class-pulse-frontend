@@ -18,7 +18,8 @@ export default function ScreenPage() {
   const { code = "" } = useParams();
   const { session, questions, isEnded, isLoading, error } = useQuestionsPolling(code);
 
-  // the /s/:code route drops the participant straight into the session, no code typing
+  // /s/:code carries the code, so nobody types it; first-timers still pass through
+  // /join to pick a name, which the telão renders as author_name
   const joinUrl = `${window.location.origin}/s/${code}`;
 
   // the telão shows only open questions, already ranked by the API; the top one is the hero
